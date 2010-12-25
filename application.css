@@ -1,0 +1,7 @@
+.bird {
+	position: absolute;
+	border-radius: 5px;
+	background: black;
+	width: 10px;
+	height: 10px;
+}
