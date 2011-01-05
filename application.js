@@ -4,7 +4,7 @@
 		this.id = idCounter++;
 		this.output = $("#bird").tmpl(this).appendTo("body");
 		this.speed = 1 + Math.random();
-		this.maxSpeed = 3 + Math.random() * 2;
+		this.maxSpeed = this.maxSpeed + Math.random() * 10;
 		this.left = Math.random() * 1000;
 		this.top = Math.random() * 1000;
 	};
@@ -21,8 +21,11 @@
 		maxSpeed: 3,
 		
 		move: function() {
-			//console.log(this.targetLeft, this.targetTop)
-			this.angle = Math.atan2(this.targetTop - this.top, this.targetLeft - this.left) + (Math.PI - Math.PI / 2);
+			// TODO try to change the current angle into the desired angle, only a small step per tick
+			//-1.567690296911886 4.690086086768462
+			//this.angle += Math.atan2(this.targetTop - this.top, this.targetLeft - this.left) - Math.PI / 2;
+			this.angle = Math.atan2(this.targetTop - this.top, this.targetLeft - this.left) + Math.PI / 2;
+			// TODO make acceleration dependent on distance to target, reduce speed when close to target
 			this.speed *= this.acceleration;
 			this.speed = Math.min(this.maxSpeed, this.speed);
 			this.left += this.speed * Math.cos(this.angle);
