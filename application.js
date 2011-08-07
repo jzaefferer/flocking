@@ -22,8 +22,6 @@
 
 		move: function() {
 			// TODO try to change the current angle into the desired angle, only a small step per tick
-			//-1.567690296911886 4.690086086768462
-			//this.angle += Math.atan2(this.targetTop - this.top, this.targetLeft - this.left) - Math.PI / 2;
 			this.angle = Math.atan2(this.targetTop - this.top, this.targetLeft - this.left) + Math.PI / 2;
 			// TODO make acceleration dependent on distance to target, reduce speed when close to target
 			this.speed *= this.acceleration;
@@ -66,6 +64,7 @@ $(function() {
 			bird.targetLeft = mousePosition.left;
 			bird.targetTop = mousePosition.top;
 			bird.move();
+			// TODO use requestAnimationFrame for rendering
 			bird.render();
 		});
 	}, 50);
