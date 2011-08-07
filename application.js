@@ -11,15 +11,15 @@
 	Bird.prototype = {
 		left: 0,
 		top: 0,
-		
+
 		targetLeft: 0,
 		targetTop: 0,
-		
+
 		speed: 0.1,
 		acceleration: 1.05,
 		angle: 0,
 		maxSpeed: 3,
-		
+
 		move: function() {
 			// TODO try to change the current angle into the desired angle, only a small step per tick
 			//-1.567690296911886 4.690086086768462
@@ -31,7 +31,7 @@
 			this.left += this.speed * Math.cos(this.angle);
 			this.top += this.speed * Math.sin(this.angle);
 		},
-		
+
 		render: function() {
 			this.output.css({
 				left: this.left,
@@ -39,7 +39,7 @@
 			});
 		}
 	};
-	
+
 	window.Bird = Bird;
 })(jQuery);
 
@@ -69,5 +69,5 @@ $(function() {
 			bird.render();
 		});
 	}, 50);
-	
+
 });
