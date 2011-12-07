@@ -21,8 +21,10 @@
 		maxSpeed: 3,
 
 		move: function() {
-			// TODO try to change the current angle into the desired angle, only a small step per tick
-			this.angle = Math.atan2(this.targetTop - this.top, this.targetLeft - this.left) + Math.PI / 2;
+			var oldAngle = this.angle;
+			var newAngle = Math.atan2(this.targetTop - this.top, this.targetLeft - this.left);
+			// almost
+			this.angle = oldAngle + (newAngle - oldAngle) / 10;
 			// TODO make acceleration dependent on distance to target, reduce speed when close to target
 			this.speed *= this.acceleration;
 			this.speed = Math.min(this.maxSpeed, this.speed);
@@ -43,7 +45,7 @@
 
 $(function() {
 	var birds = [];
-	for (var i = 0; i < 50; i++) {
+	for (var i = 0; i < 10; i++) {
 		birds.push(new Bird());
 	}
 
