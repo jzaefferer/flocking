@@ -16,6 +16,9 @@ $(function() {
 		this.velocity = new Vector(-5, 0);
 	}
 	Ball.prototype = {
+		remove: function() {
+			this.output.remove();
+		},
 		move: function() {
 
 			this.velocity = this.velocity.add(GRAVITY.scale(0.1));
@@ -65,7 +68,10 @@ $(function() {
 	$(document).keyup(function(event) {
 		// clear on escape
 		if (event.keyCode === 27) {
-			balls.splice(0, birds.length);
+			balls.forEach(function(ball) {
+				ball.remove();
+			});
+			balls.splice(0, balls.length);
 		}
 	})
 });
