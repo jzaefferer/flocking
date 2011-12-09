@@ -12,7 +12,7 @@ $(function() {
 
 	function Ball() {
 		this.position = new Point(200, 200);
-		this.output = $("<div>").addClass("bird").appendTo("body");
+		this.output = $("<div>").addClass("dot").appendTo("body");
 		this.velocity = new Vector(-5, 0);
 	}
 	Ball.prototype = {
@@ -20,8 +20,10 @@ $(function() {
 			this.output.remove();
 		},
 		move: function() {
-
+			// apply gravity
 			this.velocity = this.velocity.add(GRAVITY.scale(0.1));
+
+			// collision detection against world
 			if (this.position.y > world.y2) {
 				this.velocity.x2 = -this.velocity.x2 * FRICTION;
 				this.position.y = world.y2;
@@ -38,8 +40,12 @@ $(function() {
 					this.position.x = world.x2;
 				}
 			}
+
+			// update position
 			this.position.x += this.velocity.x1;
 			this.position.y += this.velocity.x2;
+
+			// render
 			this.output.css({
 				left: this.position.x,
 				top: this.position.y
@@ -49,12 +55,15 @@ $(function() {
 
 	var balls = [];
 	balls.push(new Ball());
+
+	// animation loop
 	setInterval(function() {
 		balls.forEach(function(ball) {
 			ball.move();
 		});
-	}, 50);
+	}, 25);
 
+	// create new balls with velocity
 	var start;
 	$(document).mousedown(function(event) {
 		start = new Point(event.pageX, event.pageY);
@@ -62,16 +71,18 @@ $(function() {
 		var end = new Point(event.pageX, event.pageY);
 		var ball = new Ball();
 		ball.position = end;
-		ball.velocity = start.relative(end).scale(0.5);
+		ball.velocity = start.relative(end).scale(0.2);
+		ball.move();
 		balls.push(ball);
 	});
+
+	// clear on escape
 	$(document).keyup(function(event) {
-		// clear on escape
 		if (event.keyCode === 27) {
 			balls.forEach(function(ball) {
 				ball.remove();
 			});
 			balls.splice(0, balls.length);
 		}
-	})
+	});
 });

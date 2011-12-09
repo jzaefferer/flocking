@@ -1,6 +1,6 @@
 $(function() {
 	function Mover(position, velocity) {
-		this.output = $("#bird").tmpl(this).appendTo("body");
+		this.output = $("<div>").addClass("dot").appendTo("body");
 		this.position = position;
 		this.velocity = velocity;
 		this.goal = position;

@@ -2,7 +2,7 @@
 	var idCounter = 0;
 	var Bird = function() {
 		this.id = idCounter++;
-		this.output = $("#bird").tmpl(this).appendTo("body");
+		this.output = $("<div>").addClass("dot").appendTo("body");
 		this.speed = 1 + Math.random();
 		this.maxSpeed = this.maxSpeed + Math.random() * 10;
 		this.left = Math.random() * 1000;
@@ -34,7 +34,8 @@
 			var diff = (newAngle - oldAngle) / 10;
 			this.angle = oldAngle + diff;
 			//*/
-			this.angle = newAngle;
+			// make it more interesting until it works properly
+			this.angle = newAngle + Math.PI / 2;
 			// TODO make acceleration dependent on distance to target, reduce speed when close to target
 			this.speed *= this.acceleration;
 			this.speed = Math.min(this.maxSpeed, this.speed);
@@ -55,7 +56,7 @@
 
 $(function() {
 	var birds = [];
-	for (var i = 0; i < 1; i++) {
+	for (var i = 0; i < 10; i++) {
 		birds.push(new Bird());
 	}
 
