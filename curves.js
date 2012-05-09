@@ -28,18 +28,27 @@ function drawCubicCurve(start, c1, c2, stop) {
 
 function drawPoint(point) {
 	// ???
-	ctx.beginPath();
-	ctx.moveTo( point.x, point.y );
-	ctx.stroke();
+	penCtx.beginPath();
+	penCtx.lineTo( point.x, point.y );
+	penCtx.lineTo( point.x + 1, point.y + 1 );
+	penCtx.stroke();
 }
 
-var canvas = $("canvas")[0];
+var canvas = $("canvas.paper")[0];
 canvas.width = $(window).width();
 canvas.height = $(window).height();
 var ctx = canvas.getContext( "2d" );
 ctx.lineWidth = 2;
 ctx.fillStyle = "black";
 ctx.strokeStyle = "#555";
+
+var penCanvas = $("canvas.pen")[0];
+penCanvas.width = canvas.width;
+penCanvas.height = canvas.height;
+penCtx = penCanvas.getContext("2d");
+penCtx.lineWidth = 2;
+penCtx.fillStyle = "black";
+penCtx.strokeStyle = "#555";
 
 drawCubicCurve(new Point(0, 0), new Point(0, 100), new Point( 100, 120), new Point(140, 0));
 drawQuadraticCurve(new Point(0, 0), new Point(50, 100), new Point(140, 0));
@@ -52,6 +61,7 @@ $(document).click(function(event) {
 	drawPoint(point);
 	if (points.length === 3) {
 		drawQuadraticCurve.apply(this, points);
+		penCtx.clearRect(0, 0, penCanvas.width, penCanvas.height);
 		points.splice(0);
 	}
 });

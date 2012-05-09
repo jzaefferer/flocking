@@ -4,9 +4,17 @@
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="application.css"/>
 		<title>Bézier Curves</title>
+		<style>
+		.pen {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		</style>
 	</head>
 	<body>
-		<canvas></canvas>
+		<canvas class="paper"></canvas>
+		<canvas class="pen"></canvas>
 		<script src="jquery-1.4.4.js"></script>
 		<script src="math.js"></script>
 		<script src="curves.js"></script>
