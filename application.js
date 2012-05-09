@@ -1,52 +1,39 @@
 (function($) {
 	var idCounter = 0;
+	var maxDistance = Math.sqrt( Math.pow($(window).height(), 2) + Math.pow($(window).width(), 2) );
 	var Bird = function() {
 		this.id = idCounter++;
 		this.output = $("<div>").addClass("dot").appendTo("body");
-		this.speed = 1 + Math.random();
-		this.maxSpeed = this.maxSpeed + Math.random() * 10;
-		this.left = Math.random() * 1000;
-		this.top = Math.random() * 1000;
+		this.start = this.inbetween = this.target = this.current;
 	};
 	Bird.prototype = {
-		left: 0,
-		top: 0,
+		current: new Point(0, 0),
 
-		targetLeft: 0,
-		targetTop: 0,
+		step: 0,
 
-		speed: 0.1,
-		acceleration: 1.05,
-		angle: 0,
-		maxSpeed: 2,
+		distanceToTarget: 0,
 
 		move: function() {
-			var oldAngle = this.angle;
-			var newAngle = Math.atan2(this.targetTop - this.top, this.targetLeft - this.left);
-			/* fixes the "can't move to the left" problem, but introduces some other weird behaviour
-			if (newAngle < 0 && oldAngle > 0) {
-				oldAngle *= -1;
+			this.step += 0.05;
+			if (this.step >= 1) {
+				this.step = 1;
 			}
-			if (newAngle > 0 && oldAngle < 0) {
-				oldAngle *= -1;
-			}
-			// almost
-			var diff = (newAngle - oldAngle) / 10;
-			this.angle = oldAngle + diff;
-			//*/
-			// make it more interesting until it works properly
-			this.angle = newAngle + Math.PI / 2;
-			// TODO make acceleration dependent on distance to target, reduce speed when close to target
-			this.speed *= this.acceleration;
-			this.speed = Math.min(this.maxSpeed, this.speed);
-			this.left += this.speed * Math.cos(this.angle);
-			this.top += this.speed * Math.sin(this.angle);
+			var step = 1 - this.step;
+			this.current = getQuadraticBezier(1 - this.step, this.start, this.inbetween, this.target);
+		},
+
+		newTarget: function(target) {
+			this.inbetween = this.target;
+			this.start = this.current;
+			this.step = 0;
+			this.target = target;
+			this.distanceToTarget = this.current.distance(this.target) / maxDistance;
 		},
 
 		render: function() {
 			this.output.css({
-				left: this.left,
-				top: this.top
+				left: this.current.x,
+				top: this.current.y
 			});
 		}
 	};
@@ -56,26 +43,22 @@
 
 $(function() {
 	var birds = [];
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 1; i++) {
 		birds.push(new Bird());
 	}
 
-	var mousePosition = {
-		left: 0,
-		top: 0
-	};
+	var mousePosition = new Point(0, 0);
 
 	$(document).mousemove(function(event) {
-		mousePosition = {
-			left: event.pageX,
-			top: event.pageY
-		};
+		mousePosition = new Point(event.pageX, event.pageY);
+	});
+	$(document).click(function() {
+		birds[0].newTarget(mousePosition);
 	});
 
 	setInterval(function() {
 		birds.forEach(function(bird) {
-			bird.targetLeft = mousePosition.left;
-			bird.targetTop = mousePosition.top;
+			// bird.target = mousePosition;
 			bird.move();
 			bird.render();
 		});
